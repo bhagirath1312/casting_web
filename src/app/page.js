@@ -206,7 +206,7 @@ export default function Home() {
                 Our mission is to provide artists with the right opportunities to showcase their talent and build successful careers.
               </p>
               <p className="mt-4 text-lg leading-relaxed">
-                Whether you're an aspiring actor, model, or voice-over artist, we ensure your skills get the attention they deserve.
+                Whether you&apos;re an aspiring actor, model, or voice-over artist, we ensure your skills get the attention they deserve.
               </p>
             </div>
           </motion.div>
