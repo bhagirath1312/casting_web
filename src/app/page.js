@@ -191,10 +191,12 @@ export default function Home() {
               viewport={{ once: true }}
               className="overflow-hidden rounded-lg shadow-lg"
             >
-              <img
-                src="/background.jpg"
+              <Image
+                src="/about.jpg"
                 alt="Casting Process"
                 className="w-full h-auto object-cover"
+                width={1080}
+                height={1080}
               />
             </motion.div>
 
