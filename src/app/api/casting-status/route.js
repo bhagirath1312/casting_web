@@ -1,6 +1,6 @@
 // app/api/casting-status/route.js
 import connectDB from "@/lib/mongodb";
-import Casting from "@/models/Casting";
+import Casting from "@/models/casting";
 import { NextResponse } from "next/server";
 
 export async function GET() {
