@@ -81,7 +81,7 @@ export default function InterestedFormPage() {
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">I'm Interested</h1>
+      <h1 className="text-2xl font-bold mb-4">I&apos;m Interested</h1>
       <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
         <div>
           <label>Name</label>
