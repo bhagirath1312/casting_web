@@ -67,7 +67,7 @@ export default async function ProfilePage() {
                     href={`/casting-status/${casting._id}/interested`}
                     className="inline-block bg-[#8D8B3A] hover:bg-[#6f6d2e] text-white px-4 py-2 rounded-md text-sm"
                   >
-                    I'm Interested
+                    I&apos;m Interested
                   </a>
                 </div>
               </div>
