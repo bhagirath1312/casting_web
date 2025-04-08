@@ -1,16 +1,25 @@
 import connectDB from "@/lib/mongodb";
 import CastingInterest from "@/models/castinginterests";
 import { notFound } from "next/navigation";
+import { Types } from "mongoose";
 
 export default async function InterestedUsersPage({ params }) {
   await connectDB();
 
-  const castingId = String(params.id);
+  const castingId = params.id;
   if (!castingId) return notFound();
 
   console.log("📌 Querying for castingId:", castingId);
 
-  const users = await CastingInterest.find({ castingId }).lean();
+  let users = [];
+  try {
+    users = await CastingInterest.find({
+      castingId: Types.ObjectId(castingId),
+    }).lean();
+  } catch (err) {
+    console.error("❌ Error finding casting interests:", err);
+    return <div className="text-red-500">Failed to load data</div>;
+  }
 
   console.log("✅ Users found:", users.length);
 
