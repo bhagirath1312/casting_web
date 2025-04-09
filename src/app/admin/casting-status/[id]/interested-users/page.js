@@ -13,7 +13,7 @@ export default async function InterestedUsersPage({ params }) {
   let users = [];
   try {
     // ✅ Match string with string
-    users = await CastingInterest.find({ castingId }).lean();
+    const users = await CastingInterest.find({ castingId: new ObjectId(castingId) });
   } catch (err) {
     console.error("❌ Error finding casting interests:", err);
     return <div className="text-red-500">Failed to load interested users.</div>;
