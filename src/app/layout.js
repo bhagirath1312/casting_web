@@ -34,14 +34,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={darkMode ? "dark" : ""}>
       <body
-        className={`${inter.variable} ${
-          robotoMono.variable
-        } antialiased transition-all duration-300 ${
+        className={`${inter.variable} ${robotoMono.variable} antialiased transition-all duration-300 ${
           darkMode ? "bg-gray-900 text-white" : "bg-white text-black"
         }`}
       >
         <SessionProvider>
-          <Navbar
+          <Navbar 
             sections={[
               { id: "home", label: "Home" },
               { id: "about-us", label: "About Us" },
@@ -52,7 +50,12 @@ export default function RootLayout({ children }) {
               { id: "contact", label: "Contact" },
             ]}
           />
-          {children}
+          
+          {/* Content wrapped in <main> with top padding to prevent hiding under navbar */}
+          <main className="pt-16">
+            {children}
+          </main>
+
         </SessionProvider>
       </body>
     </html>

@@ -30,11 +30,13 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'castingprofile.s3.eu-north-1.amazonaws.com',
-        pathname: '**',
+        hostname: '**.s3.eu-north-1.amazonaws.com',
+        // pathname: '/**', // ✅ Matches all uploaded files
       },
     ],
   },
+  
+
 };
 
 module.exports = nextConfig;
