@@ -1,6 +1,6 @@
 // src/app/api/casting-status/[id]/route.js
 import connectDB from '@/lib/mongodb';
-import Casting from '@/models/casting'; // ✅ Make sure this is the casting post model
+import Casting from '@/models/castinginterests'; // ✅ Make sure this is the casting post model
 import { NextResponse } from 'next/server';
 
 // // GET a single casting post
