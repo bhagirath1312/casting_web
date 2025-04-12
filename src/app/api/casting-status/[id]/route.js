@@ -3,21 +3,21 @@ import connectDB from '@/lib/mongodb';
 import Casting from '@/models/casting'; // ✅ Make sure this is the casting post model
 import { NextResponse } from 'next/server';
 
-// GET a single casting post
-export async function GET(_, { params }) {
-  await connectDB();
+// // GET a single casting post
+// export async function GET(_, { params }) {
+//   await connectDB();
 
-  try {
-    const casting = await Casting.findById(params.id);
-    if (!casting) {
-      return NextResponse.json({ message: 'Casting post not found' }, { status: 404 });
-    }
+//   try {
+//     const casting = await Casting.findById(params.id);
+//     if (!casting) {
+//       return NextResponse.json({ message: 'Casting post not found' }, { status: 404 });
+//     }
 
-    return NextResponse.json(casting);
-  } catch (error) {
-    return NextResponse.json({ message: 'Error fetching casting post' }, { status: 500 });
-  }
-}
+//     return NextResponse.json(casting);
+//   } catch (error) {
+//     return NextResponse.json({ message: 'Error fetching casting post' }, { status: 500 });
+//   }
+// }
 
 // PATCH (update) a casting post
 export async function PATCH(req, { params }) {
@@ -54,21 +54,25 @@ export async function DELETE(_, { params }) {
 }
 
 
-// GET interested users for a casting post
 export async function GET(req, { params }) {
-    const castingId = params.id;
-  
-    if (!castingId) {
-      return NextResponse.json({ message: "Casting ID is required" }, { status: 400 });
-    }
+    await connectDB();
+    const { searchParams } = new URL(req.url);
+    const showInterests = searchParams.get("interests");
   
     try {
-      await connectToDB();
-      const users = await CastingInterest.find({ castingId }).lean();
+      if (showInterests === "true") {
+        const users = await CastingInterest.find({ castingId: params.id }).lean();
+        return NextResponse.json(users, { status: 200 });
+      }
   
-      return NextResponse.json(users, { status: 200 });
+      const casting = await Casting.findById(params.id);
+      if (!casting) {
+        return NextResponse.json({ message: 'Casting post not found' }, { status: 404 });
+      }
+  
+      return NextResponse.json(casting);
     } catch (error) {
-      console.error("Error fetching interested users:", error);
-      return NextResponse.json({ message: "Server error" }, { status: 500 });
+      console.error("Error in GET /casting-status/[id]:", error);
+      return NextResponse.json({ message: 'Server error' }, { status: 500 });
     }
   }
