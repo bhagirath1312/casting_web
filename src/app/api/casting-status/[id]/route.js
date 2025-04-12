@@ -1,3 +1,4 @@
+// src/app/api/casting-status/[id]/route.js
 import connectDB from '@/lib/mongodb';
 import Casting from '@/models/casting'; // ✅ Make sure this is the casting post model
 import { NextResponse } from 'next/server';
@@ -51,3 +52,23 @@ export async function DELETE(_, { params }) {
     return NextResponse.json({ message: 'Error deleting casting post' }, { status: 500 });
   }
 }
+
+
+// GET interested users for a casting post
+export async function GET(req, { params }) {
+    const castingId = params.id;
+  
+    if (!castingId) {
+      return NextResponse.json({ message: "Casting ID is required" }, { status: 400 });
+    }
+  
+    try {
+      await connectToDB();
+      const users = await CastingInterest.find({ castingId }).lean();
+  
+      return NextResponse.json(users, { status: 200 });
+    } catch (error) {
+      console.error("Error fetching interested users:", error);
+      return NextResponse.json({ message: "Server error" }, { status: 500 });
+    }
+  }

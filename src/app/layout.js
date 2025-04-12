@@ -31,6 +31,9 @@ export default function RootLayout({ children }) {
     initTheme();
   }, [initTheme]);
 
+  // 🚫 Wait until theme is initialized before rendering
+  if (!initializeTheme) return null; // You can use a spinner here if you prefer
+
   return (
     <html lang="en" className={darkMode ? "dark" : ""}>
       <body
@@ -50,12 +53,11 @@ export default function RootLayout({ children }) {
               { id: "contact", label: "Contact" },
             ]}
           />
-          
+
           {/* Content wrapped in <main> with top padding to prevent hiding under navbar */}
-          <main className="pt-16">
+          <main className="mt-16">
             {children}
           </main>
-
         </SessionProvider>
       </body>
     </html>

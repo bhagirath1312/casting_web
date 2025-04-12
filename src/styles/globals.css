@@ -25,11 +25,14 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   @apply bg-neutral;
+  margin: 0;
+  padding: 0;
 }
 
 /* ✅ Use Tailwind Classes */
 html, body {
   scroll-behavior: smooth;
+ 
 }
 
 /* ✅ Navbar Transition */

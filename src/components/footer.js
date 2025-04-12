@@ -28,7 +28,7 @@ export default function Footer() {
         
         {/* Company Info */}
         <div>
-          <h2 className="text-2xl font-bold">Casting Hub</h2>
+          <h2 className="text-2xl font-bold">Casting Nation</h2>
           <p className="text-gray-300 mt-2 text-sm leading-relaxed">
             Your gateway to the entertainment industry, connecting top talent with exciting casting opportunities.
           </p>
@@ -49,7 +49,7 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-semibold">Support</h3>
           <ul className="mt-3 space-y-2">
-            <FooterLink href="mailto:support@castinghub.com" text="support@castinghub.com" icon={<Mail size={18} />} />
+            <FooterLink href="mailto:support@castinghub.com" text="support@castingnation.com" icon={<Mail size={18} />} />
             <FooterLink href="tel:+1234567890" text="+1 234 567 890" icon={<Phone size={18} />} />
             <FooterLink href="/privacy-policy" text="Privacy Policy" />
             <FooterLink href="/terms-of-service" text="Terms of Service" />
@@ -70,7 +70,7 @@ export default function Footer() {
 
       {/* Bottom Footer */}
       <div className="border-t border-gray-500 mt-8 pt-6 text-center text-gray-300 text-sm">
-        © {new Date().getFullYear()} Casting Hub. All rights reserved.
+        © {new Date().getFullYear()} Casting Nation. All rights reserved.
       </div>
     </footer>
   );
