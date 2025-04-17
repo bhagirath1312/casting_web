@@ -272,7 +272,7 @@ const TestimonialCard = memo(({ quote, name, role, avatar }) => {
         transition={{ delay: 0.1, duration: 0.3 }}
         className="text-primary dark:text-dark-primary text-4xl mb-4 opacity-70"
       >
-        "
+        &quot;
       </motion.div>
       <motion.blockquote 
         className="text-lg md:text-xl italic text-black dark:text-white mb-6"
@@ -859,7 +859,7 @@ export default function Home() {
                   transition={{ delay: 0.2, duration: 0.4 }}
                   className="text-primary dark:text-dark-primary text-4xl mb-4"
                 >
-                  "
+                  &quot;
                 </motion.div>
                 <motion.blockquote 
                   className="text-lg md:text-xl italic text-black dark:text-white mb-6"
