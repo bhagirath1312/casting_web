@@ -23,7 +23,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-[#5B408C] text-white py-12 mt-16">
+    <footer className="bg-[#5B408C] text-white py-8 mt-1"> {/* Reduced padding and margin */}
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
         
         {/* Company Info */}

@@ -6,7 +6,7 @@ import User from "@/models/User";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, email, password, age, languages, mobile, gender, location } = body;
+    const { name, email, password, age, languages, mobile, gender, location , height, weight,} = body;
 
     // ✅ Validate required fields
     if (!name || !email || !password || !age || !languages || !mobile || !gender || !location) {
@@ -31,6 +31,8 @@ export async function POST(req) {
       mobile,
       gender,
       location,
+      height,
+      weight,
       role: "user",
     });
 

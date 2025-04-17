@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import imageCompression from 'browser-image-compression';
+import axios from 'axios';
+import { PDFDocument } from 'pdf-lib';
+import { rgb } from 'pdf-lib';
 
 export default function InterestedFormPage() {
   const { data: session } = useSession();
@@ -13,9 +17,9 @@ export default function InterestedFormPage() {
   const [photos, setPhotos] = useState([]);
   const [videos, setVideos] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
-    // Fetch user data from DB using email in session
     const fetchUser = async () => {
       if (session?.user?.email) {
         const res = await fetch(`/api/user?email=${session.user.email}`);
@@ -26,16 +30,68 @@ export default function InterestedFormPage() {
     fetchUser();
   }, [session]);
 
-  const handlePhotosChange = (e) => {
+  const handlePhotosChange = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 5) return alert("Max 5 photos allowed");
-    setPhotos(files);
+
+    const compressedPhotos = [];
+    for (const file of files) {
+      try {
+        const options = {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1024,
+          useWebWorker: true,
+          fileType: 'image/webp',
+        };
+        const compressedFile = await imageCompression(file, options);
+        compressedPhotos.push(compressedFile);
+      } catch (error) {
+        console.error("Compression error:", error);
+      }
+    }
+
+    setPhotos(compressedPhotos);
   };
 
   const handleVideosChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 3) return alert("Max 3 videos allowed");
     setVideos(files);
+  };
+
+  const generatePDF = async (data) => {
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([600, 400]);
+
+    let yPosition = 350;
+
+    // Add Photos to the PDF
+    for (const photo of data.photos) {
+      const photoBytes = await fetch(photo.url).then((res) => res.arrayBuffer());
+      const photoImage = await pdfDoc.embedJpg(photoBytes);
+      const photoDims = photoImage.scale(0.5);
+      page.drawImage(photoImage, {
+        x: 50,
+        y: yPosition,
+        width: photoDims.width,
+        height: photoDims.height,
+      });
+      yPosition -= photoDims.height + 10;
+    }
+
+    // Add Video Links to the PDF
+    for (const video of data.videos) {
+      page.drawText(`Video Link: ${video.url}`, {
+        x: 50,
+        y: yPosition,
+        size: 12,
+        color: rgb(0, 0, 1),
+      });
+      yPosition -= 20;
+    }
+
+    const pdfBytes = await pdfDoc.save();
+    return pdfBytes;
   };
 
   const handleSubmit = async (e) => {
@@ -55,20 +111,43 @@ export default function InterestedFormPage() {
     videos.forEach((video) => formData.append('videos', video));
 
     setSubmitting(true);
+    setUploadProgress(0);
 
-    const res = await fetch('/api/casting-interest', {
-      method: 'POST',
-      body: formData,
-    });
+    try {
+      const res = await axios.post('/api/casting-interest', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percent);
+        },
+      });
 
-    if (res.ok) {
-      alert('Submitted successfully!');
-      router.push('/profile');
-    } else {
-      alert('Submission failed.');
+      if (res.status === 200) {
+        // Fetch response data containing video links and photo URLs
+        const data = await res.json();
+        
+        // Generate PDF
+        const pdfBytes = await generatePDF(data);  // Generate PDF with both photos and video links
+        const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+        // Download the generated PDF
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(pdfBlob);
+        link.download = 'casting_interest.pdf';
+        link.click();
+
+        alert('Submitted successfully!');
+        router.push('/profile');
+      } else {
+        alert('Submission failed.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Something went wrong.');
     }
 
     setSubmitting(false);
+    setUploadProgress(0);
   };
 
   if (!session) {
@@ -143,6 +222,7 @@ export default function InterestedFormPage() {
             type="file"
             accept="image/*"
             multiple
+            disabled={submitting}
             onChange={handlePhotosChange}
           />
         </div>
@@ -153,6 +233,7 @@ export default function InterestedFormPage() {
             type="file"
             accept="video/*"
             multiple
+            disabled={submitting}
             onChange={handleVideosChange}
           />
         </div>
@@ -160,10 +241,22 @@ export default function InterestedFormPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded"
+          className="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded w-full"
         >
-          {submitting ? 'Submitting...' : 'Submit Interest'}
+          {submitting ? 'Uploading...' : 'Submit Interest'}
         </button>
+
+        {uploadProgress > 0 && (
+          <div className="w-full bg-gray-200 rounded h-3 mt-2">
+            <div
+              className="bg-purple-600 h-3 rounded transition-all duration-300"
+              style={{ width: `${uploadProgress}%` }}
+            />
+            <p className="text-sm text-gray-600 mt-1 text-center">
+              {uploadProgress}% uploaded
+            </p>
+          </div>
+        )}
       </form>
     </div>
   );

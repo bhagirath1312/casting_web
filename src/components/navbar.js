@@ -309,7 +309,7 @@ export default function Navbar({
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${darkMode ? "bg-gray-900" : "bg-[#F4F0F9]"}`}>
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
         <h2 className={`text-xl font-bold cursor-pointer ${darkMode ? "text-white" : "text-black"}`} onClick={() => scrollToSection("home")}>
           Logo
         </h2>

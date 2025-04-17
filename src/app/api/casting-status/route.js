@@ -1,68 +1,34 @@
-// // app/api/casting-status/route.js
-// import connectDB from "@/lib/mongodb";
-// import Casting from "@/models/casting";
-// import { NextResponse } from "next/server";
-
-// export async function GET() {
-//   await connectDB();
-//   const castings = await Casting.find().sort({ createdAt: -1 });
-//   return NextResponse.json(castings);
-// }
-
-// export async function POST(req) {
-//   await connectDB();
-//   const data = await req.json();
-//   const newCasting = await Casting.create(data);
-//   return NextResponse.json(newCasting, { status: 201 });
-// }
-
-
-// // app/api/casting-status/route.js
-
-// import connectDB from "@/lib/mongodb";
-// import Casting from "@/models/casting";
-// import { NextResponse } from "next/server";
-// import { uploadCastingImageToS3 } from "@/lib/s3Uploader";
-
-// export async function POST(req) {
-//   await connectDB();
-
-//   const formData = await req.formData();
-
-//   const file = formData.get("image");
-//   let imageUrl = "";
-
-//   if (file && file.name) {
-//     const buffer = Buffer.from(await file.arrayBuffer());
-//     imageUrl = await uploadCastingImageToS3(buffer, file.type);
-//   }
-
-//   const newCasting = await Casting.create({
-//     title: formData.get("title"),
-//     description: formData.get("description"),
-//     age: formData.get("age"),
-//     location: formData.get("location"),
-//     phone: formData.get("phone"),
-//     company: formData.get("company"),
-//     imageUrl,
-//   });
-
-//   return NextResponse.json(newCasting, { status: 201 });
-// }
 
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Casting from '@/models/casting';
+import CastingInterest from '@/models/InterestSubmission'; 
 
 export async function GET() {
   try {
     await connectDB();
     const castings = await Casting.find().sort({ createdAt: -1 });
-    return NextResponse.json(castings);
+
+    const results = await Promise.all(
+      castings.map(async (casting) => {
+        console.log(`Fetching applicants for casting ID: ${casting._id}`); // Add a log to see which casting we're checking
+
+        const applicantCount = await CastingInterest.countDocuments({ castingId: casting._id });
+        console.log(`Casting ID: ${casting._id} - Applicants Found: ${applicantCount}`); // Log the result
+
+        return {
+          ...casting.toObject(),
+          applicantCount,
+        };
+      })
+    );
+
+    return NextResponse.json(results);
   } catch (err) {
     console.error('Fetch casting error:', err);
     return NextResponse.json({ error: 'Failed to fetch casting posts' }, { status: 500 });
   }
+  
 }
 
 export async function POST(req) {

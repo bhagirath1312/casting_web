@@ -10,7 +10,8 @@ export default function SignupPage() {
 
   const [form, setForm] = useState({
     name: '', email: '', password: '',
-    age: '', languages: [], mobile: '',
+    age: '', height: '', weight: '',
+    languages: [], mobile: '',
     gender: '', location: ''
   });
 
@@ -84,6 +85,8 @@ export default function SignupPage() {
           <Input name="email" type="email" placeholder="Email" onChange={handleChange} />
           <Input name="password" type="password" placeholder="Password" onChange={handleChange} />
           <Input name="age" type="number" placeholder="Age" onChange={handleChange} />
+          <Input name="height" type="text" placeholder="Height (e.g., 5'8 or 172 cm)" onChange={handleChange} />
+          <Input name="weight" type="text" placeholder="Weight (e.g., 60 kg)" onChange={handleChange} />
 
           {/* Language Dropdown */}
           <div className="relative" ref={languageRef}>
