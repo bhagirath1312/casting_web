@@ -236,6 +236,8 @@ import { useSession, signOut } from "next-auth/react";
 import useThemeStore from "@/store/themeStore";
 import { usePathname, useRouter } from "next/navigation";
 
+import Image from "next/image";
+
 export default function Navbar({
   sections = [],
   moreItems = [],
@@ -310,9 +312,23 @@ export default function Navbar({
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${darkMode ? "bg-gray-900" : "bg-[#F4F0F9]"}`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <h2 className={`text-xl font-bold cursor-pointer ${darkMode ? "text-white" : "text-black"}`} onClick={() => scrollToSection("home")}>
-          Logo
-        </h2>
+        <button
+    onClick={() => scrollToSection("home")}
+    aria-label="Go to home"
+    // Classes for spacing and alignment
+    className="flex items-center p-1 -ml-1 cursor-pointer" 
+>   
+    {/* img set kaarva mate */}
+    <Image
+        src="/IMG_4470.png"// Aapki logo file ka path
+        alt="National Casting Mumbai Logo"
+        width={180} // Width set karein
+        height={70} // Height set karein
+        priority
+        // Responsive sizing: h-10 (mobile) to h-12 (desktop)
+        className="transition-transform duration-500 hover:scale-[1.03] h-10 w-auto md:h-12"
+    />
+</button>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center space-x-6">
