@@ -261,7 +261,7 @@ export default function Home() {
             className="flex flex-col md:flex-row rounded-3xl overflow-hidden shadow-2xl dark:shadow-amber-500/30"
           >
             {/* Left Panel: Image (Visual Focus) */}
-  <div className="md:w-1/2 bg-amber-600 dark:bg-amber-600 p-1.5 flex items-center justify-center">
+  <div className="md:w-1/2 bg-amber-400 dark:bg-amber-400 p-1.5 flex items-center justify-center">
   <motion.div
     initial={{ scale: 0.9, opacity: 0 }}         // Starts slightly zoomed out
     whileInView={{ scale: 1, opacity: 1 }}       // Zooms in when scrolled into view
