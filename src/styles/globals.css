@@ -1,0 +1,62 @@
+/* Tailwind Base */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ✅ Define CSS Variables for Theme */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ✅ Fix Dark Mode CSS Variables */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* ✅ Apply Theme Variables */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  @apply bg-neutral;
+  margin: 0;
+  padding: 0;
+}
+
+/* ✅ Use Tailwind Classes */
+html, body {
+  scroll-behavior: smooth;
+ 
+}
+
+/* ✅ Navbar Transition */
+.navbar-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+/* ✅ Fix Dark Mode */
+html.dark {
+  @apply bg-darkBg text-darkText;
+}
+
+/* Spinner Styles */
+.spinner {
+  border: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+/* Animation for the spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
